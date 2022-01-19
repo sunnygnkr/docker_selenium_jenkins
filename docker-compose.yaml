@@ -1,0 +1,29 @@
+version: "3"
+services:
+  hub:
+    image: selenium/hub:3.14
+    ports: 
+      - "4444:4444"
+  chrome:
+    image: selenium/node-chrome:3.14
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  firefox:
+    image: selenium/node-firefox:3.14
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  search-module:
+    image: sun3193/selenium-docker
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - HUB_HOST=hub
+      - BROWSER=chrome
+      - MODULE=testng.xml
+    volumes:
+      - ./result_output:/Users/QQ864CK/eclipse-workspace/Selenium_Docker_YoutubeTutorials/test-output
